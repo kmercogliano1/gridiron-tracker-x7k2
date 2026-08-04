@@ -89,11 +89,37 @@ const MEALS = [
 { key: "evening", label: "Evening snack", target: 15 },
 ];
 const RECOVERY = {
-  GAME: [ {key:"iceBath",label:"Ice bath",detail:"8-10 min, that night"}, {key:"roller",label:"Foam roller",detail:"5-10 min, full body"}, {key:"gun",label:"Massage gun",detail:"Quads, hamstrings, calves — 45 sec each"} ],
-  PRACTICE: [ {key:"roller",label:"Foam roller",detail:"5-10 min"}, {key:"gun",label:"Massage gun",detail:"Legs + upper back — 45 sec each"}, {key:"iceBathThu",label:"Ice bath (Thu only)",detail:"8-10 min, evening"} ],
-  LIFT_HEAVY: [ {key:"roller",label:"Foam roller",detail:"5-10 min, evening"}, {key:"gun",label:"Massage gun",detail:"Worked muscle groups — 30-45 sec each"} ],
-  LIFT_LIGHT: [ {key:"roller",label:"Foam roller",detail:"5-10 min, evening"}, {key:"gun",label:"Massage gun",detail:"Worked muscle groups — 30-45 sec each"} ],
-  WALK: [ {key:"roller",label:"Foam roller",detail:"Light, 5 min"} ],
+    GAME: [
+      {key:"gunQuadsGlutes",label:"Gun — quads & glutes",detail:"Round head, 45 sec each side"},
+      {key:"gunHams",label:"Gun — hamstrings",detail:"Flat head, 45 sec each side"},
+      {key:"gunCalvesTraps",label:"Gun — calves & traps",detail:"Fork head, 30 sec each side (avoid Achilles)"},
+      {key:"gunNeck",label:"Gun — neck (if tight)",detail:"Cushion head, 20 sec each side"},
+      {key:"roller",label:"Foam roller",detail:"5-10 min, full body"},
+      {key:"iceBath",label:"Ice bath",detail:"8-10 min, that night"},
+        ],
+    PRACTICE: [
+      {key:"gunQuadsHams",label:"Gun — quads & hamstrings",detail:"Flat head, 45 sec each"},
+      {key:"gunCalves",label:"Gun — calves",detail:"Fork head, 30 sec each (avoid Achilles)"},
+      {key:"gunGlutes",label:"Gun — glutes",detail:"Round head, 30 sec each"},
+      {key:"roller",label:"Foam roller",detail:"5-10 min"},
+      {key:"iceBathThu",label:"Ice bath (Thu only)",detail:"8-10 min, evening"},
+        ],
+    LIFT_HEAVY: [
+      {key:"gunQuads",label:"Gun — quads",detail:"Round head, 45 sec each leg"},
+      {key:"gunHamsGlutes",label:"Gun — hamstrings & glutes",detail:"Flat head, 45 sec each side"},
+      {key:"gunTraps",label:"Gun — upper traps",detail:"Fork head, 30 sec each side"},
+      {key:"roller",label:"Foam roller",detail:"5-10 min, evening"},
+        ],
+    LIFT_LIGHT: [
+      {key:"gunQuadsLats",label:"Gun — quads & lats",detail:"Round head, 45 sec each side"},
+      {key:"gunForearmsTraps",label:"Gun — forearms & traps",detail:"Fork head, 30 sec each side"},
+      {key:"gunGlutes",label:"Gun — glutes",detail:"Flat head, 30 sec each side"},
+      {key:"roller",label:"Foam roller",detail:"5-10 min, evening"},
+        ],
+    WALK: [
+      {key:"gunLight",label:"Gun — light, whatever's tight",detail:"Cushion head, 5 min total"},
+      {key:"roller",label:"Foam roller",detail:"Light, 5 min"},
+        ],
 };
 
 let state = { date: new Date() };
