@@ -79,15 +79,49 @@ const LIFTS = {
   LIFT_HEAVY: ["Goblet / box squat","Romanian deadlift","DB bench press","Chest-supported row","Walking lunge","Plank + side plank","Neck / trap work"],
   LIFT_LIGHT: ["Front squat / split squat","Single-leg RDL","Incline DB press","Lat pulldown / pull-ups","Step-ups","Dead bug / Pallof press","Neck / trap work"],
 };
-const MEALS = [
-{ key: "breakfast", label: "Breakfast", target: 25 },
-{ key: "snack1", label: "Mid-morning snack", target: 15 },
-{ key: "lunch", label: "Lunch", target: 30 },
-{ key: "preSnack", label: "Pre-practice snack", target: 10 },
-{ key: "postSnack", label: "Post-practice recovery", label2: "(within 45-60 min)", target: 20 },
-{ key: "dinner", label: "Dinner", target: 30 },
-{ key: "evening", label: "Evening snack", target: 15 },
-];
+const MEALS_BY_TYPE = {
+    GAME: [
+      { key: "breakfast", label: "Breakfast", target: 25 },
+      { key: "snack1", label: "Mid-morning snack", target: 15 },
+      { key: "lunch", label: "Lunch", target: 30 },
+      { key: "preGame", label: "Pre-game meal", label2: "(1-2 hrs before)", target: 15 },
+      { key: "postGame", label: "Post-game recovery", label2: "(within 45-60 min)", target: 20 },
+      { key: "dinner", label: "Dinner", target: 30 },
+      { key: "evening", label: "Evening snack", target: 15 },
+        ],
+    PRACTICE: [
+      { key: "breakfast", label: "Breakfast", target: 25 },
+      { key: "snack1", label: "Mid-morning snack", target: 15 },
+      { key: "lunch", label: "Lunch", target: 30 },
+      { key: "preSnack", label: "Pre-practice snack", target: 10 },
+      { key: "postSnack", label: "Post-practice recovery", label2: "(within 45-60 min)", target: 20 },
+      { key: "dinner", label: "Dinner", target: 30 },
+      { key: "evening", label: "Evening snack", target: 15 },
+        ],
+    LIFT_HEAVY: [
+      { key: "breakfast", label: "Breakfast", target: 25 },
+      { key: "snack1", label: "Mid-morning snack", target: 15 },
+      { key: "lunch", label: "Lunch", target: 30 },
+      { key: "postWorkout", label: "Post-workout recovery", label2: "(within 45-60 min)", target: 20 },
+      { key: "dinner", label: "Dinner", target: 30 },
+      { key: "evening", label: "Evening snack", target: 15 },
+        ],
+    LIFT_LIGHT: [
+      { key: "breakfast", label: "Breakfast", target: 25 },
+      { key: "snack1", label: "Mid-morning snack", target: 15 },
+      { key: "lunch", label: "Lunch", target: 30 },
+      { key: "postWorkout", label: "Post-workout recovery", label2: "(within 45-60 min)", target: 20 },
+      { key: "dinner", label: "Dinner", target: 30 },
+      { key: "evening", label: "Evening snack", target: 15 },
+        ],
+    WALK: [
+      { key: "breakfast", label: "Breakfast", target: 25 },
+      { key: "snack1", label: "Mid-morning snack", target: 15 },
+      { key: "lunch", label: "Lunch", target: 30 },
+      { key: "dinner", label: "Dinner", target: 30 },
+      { key: "evening", label: "Evening snack", target: 15 },
+        ],
+};
 const RECOVERY = {
     GAME: [
       {key:"gunQuadsGlutes",label:"Gun — quads & glutes",detail:"Round head, 45 sec each side"},
@@ -150,8 +184,9 @@ function render() {
   const weightHistory = loadWeightLog();
   const liftList = LIFTS[plan.type] || null;
   const recoveryList = RECOVERY[plan.type] || [];
-  const proteinTarget = MEALS.reduce((s,m) => s + m.target, 0);
-  const proteinDone = MEALS.filter(m => entry.meals[m.key]).reduce((s,m) => s + m.target, 0);
+    const meals = MEALS_BY_TYPE[plan.type] || MEALS_BY_TYPE.WALK;
+      const proteinTarget = meals.reduce((s,m) => s + m.target, 0);
+      const proteinDone = meals.filter(m => entry.meals[m.key]).reduce((s,m) => s + m.target, 0);
   const liftDone = liftList ? liftList.filter(n => entry.lifts[n]).length : 0;
   const recoveryDone = recoveryList.filter(r => entry.recovery[r.key]).length;
   const isToday = key === dateKey(new Date());
@@ -180,7 +215,7 @@ function render() {
   const mealHtml = `<section><div class="sec-head"><span class="sec-label">Meals + protein</span>
       <span class="sec-count" style="color:${proteinDone>=115?'var(--green)':'var(--muted)'}">${proteinDone}g / ${proteinTarget}g</span></div>
       <div class="progress-track"><div class="progress-fill" style="width:${Math.min(100,(proteinDone/proteinTarget)*100)}%"></div></div>
-      <div class="card">${MEALS.map(m => `
+      <div class="card">${meals.map(m => `
         <button class="row-btn" data-meal="${m.key}">
           <span class="chk ${entry.meals[m.key]?'on':''}">${entry.meals[m.key]?checkIcon():''}</span>
           <span class="meal-name ${entry.meals[m.key]?'struck':''}" style="flex:1">${m.label}${m.label2?` <span style="color:var(--muted);font-size:12px">${m.label2}</span>`:''}</span>
