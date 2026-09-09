@@ -65,15 +65,33 @@
   <div class="app" id="app"></div>
 
   <script>
-  const DAY_PLAN = {
-    0: { label: "Sun", type: "GAME", tag: "Game day" },
-  1: { label: "Mon", type: "LIFT_HEAVY", tag: "Lift — heavy" },
+const WEEKDAY_DEFAULT = {
+    0: { label: "Sun", type: "WALK", tag: "Rest day" },
+    1: { label: "Mon", type: "LIFT_HEAVY", tag: "Lift — heavy" },
     2: { label: "Tue", type: "PRACTICE", tag: "Pads practice" },
     3: { label: "Wed", type: "LIFT_LIGHT", tag: "Lift — light" },
     4: { label: "Thu", type: "PRACTICE", tag: "Pads practice" },
     5: { label: "Fri", type: "WALK", tag: "Walkthrough" },
-  6: { label: "Sat", type: "WALK", tag: "Walkthrough" },
-       };
+    6: { label: "Sat", type: "WALK", tag: "Walkthrough" },
+};
+    const GAMES = {
+        "2026-08-30": "Walpole",
+        "2026-09-06": "Weymouth",
+        "2026-09-12": "Dover-Sherborn",
+        "2026-09-19": "Taunton",
+        "2026-09-27": "Lincoln-Sudbury",
+        "2026-10-04": "Milton",
+        "2026-10-11": "Attleboro",
+        "2026-10-18": "Needham",
+    };
+    function getPlan(d) {
+        const k = dateKey(d);
+        const base = WEEKDAY_DEFAULT[d.getDay()];
+        if (GAMES[k]) return { label: base.label, type: "GAME", tag: "Game vs " + GAMES[k] };
+        const yest = new Date(d); yest.setDate(d.getDate() - 1);
+        if (GAMES[dateKey(yest)]) return { label: base.label, type: "WALK", tag: "Recovery day" };
+        return base;
+    }
 const TYPE_COLOR = { GAME: "var(--danger)", LIFT_HEAVY: "var(--gold)", LIFT_LIGHT: "var(--gold)", PRACTICE: "var(--green)", WALK: "var(--muted2)" };
 const LIFTS = {
   LIFT_HEAVY: ["Goblet / box squat","Romanian deadlift","DB bench press","Chest-supported row","Walking lunge","Plank + side plank","Neck / trap work"],
@@ -179,7 +197,7 @@ function chevIcon(dir) { return dir === "left" ? '<svg class="icon" viewBox="0 0
 function render() {
   const key = dateKey(state.date);
   const dow = state.date.getDay();
-  const plan = DAY_PLAN[dow];
+    const plan = getPlan(state.date);
   const entry = loadEntry(key);
   const weightHistory = loadWeightLog();
   const liftList = LIFTS[plan.type] || null;
@@ -195,7 +213,7 @@ function render() {
   let stripHtml = "";
   for (let off = -2; off <= 4; off++) {
     const d = new Date(); d.setDate(d.getDate() + off);
-    const dp = DAY_PLAN[d.getDay()];
+          const dp = getPlan(d);
     const active = dateKey(d) === key;
     stripHtml += `<button class="strip-day ${active?'active':''}" data-offset="${off}">
       <span class="dow">${dp.label}</span><span class="num">${d.getDate()}</span>
