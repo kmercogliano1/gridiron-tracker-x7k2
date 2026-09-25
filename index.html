@@ -176,7 +176,7 @@ const RECOVERY = {
 
 let state = { date: new Date() };
 
-function dateKey(d) { return d.toISOString().slice(0,10); }
+function dateKey(d) { const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,"0"),day=String(d.getDate()).padStart(2,"0"); return y+"-"+m+"-"+day; }
 function fmtDate(d) { return d.toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" }); }
 function loadEntry(key) {
   try { const raw = localStorage.getItem("day:" + key); return raw ? JSON.parse(raw) : { lifts:{}, meals:{}, recovery:{}, weight:null }; }
