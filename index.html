@@ -84,19 +84,24 @@ const WEEKDAY_DEFAULT = {
         "2026-10-11": "Attleboro",
         "2026-10-18": "Needham",
     };
+    const ONE_OFF = {
+        "2026-09-25": { type: "LIFT_UPPER", tag: "Lift — upper only (no legs)" },
+    };
     function getPlan(d) {
         const k = dateKey(d);
         const base = WEEKDAY_DEFAULT[d.getDay()];
         if (GAMES[k]) return { label: base.label, type: "GAME", tag: "Game vs " + GAMES[k] };
+        if (ONE_OFF[k]) return { label: base.label, type: ONE_OFF[k].type, tag: ONE_OFF[k].tag };
         const yest = new Date(d); yest.setDate(d.getDate() - 1);
         if (GAMES[dateKey(yest)]) return { label: base.label, type: "WALK", tag: "Recovery day" };
         return base;
     }
-const TYPE_COLOR = { GAME: "var(--danger)", LIFT_HEAVY: "var(--gold)", LIFT_LIGHT: "var(--gold)", PRACTICE: "var(--green)", WALK: "var(--muted2)" };
-const LIFTS = {
+const TYPE_COLOR = { GAME: "var(--danger)", LIFT_HEAVY: "var(--gold)", LIFT_LIGHT: "var(--gold)", LIFT_UPPER: "var(--gold)", PRACTICE: "var(--green)", WALK: "var(--muted2)" };
+    const LIFTS = {
   LIFT_HEAVY: ["Goblet / box squat","Romanian deadlift","DB bench press","Chest-supported row","Walking lunge","Plank + side plank","Neck / trap work"],
   LIFT_LIGHT: ["Front squat / split squat","Single-leg RDL","Incline DB press","Lat pulldown / pull-ups","Step-ups","Dead bug / Pallof press","Neck / trap work"],
-};
+};  LIFT_UPPER: ["Incline DB press","DB pullovers","DB shoulder press","Bicep curls","Tricep extensions","Neck / trap work"],
+      };
 const MEALS_BY_TYPE = {
     GAME: [
       { key: "breakfast", label: "Breakfast", target: 25 },
@@ -139,6 +144,14 @@ const MEALS_BY_TYPE = {
       { key: "dinner", label: "Dinner", target: 30 },
       { key: "evening", label: "Evening snack", target: 15 },
         ],
+  LIFT_UPPER: [
+    { key: "breakfast", label: "Breakfast", target: 25 },
+    { key: "snack1", label: "Mid-morning snack", target: 15 },
+    { key: "lunch", label: "Lunch", target: 30 },
+    { key: "postWorkout", label: "Post-workout recovery", label2: "(within 45-60 min)", target: 20 },
+    { key: "dinner", label: "Dinner", target: 30 },
+    { key: "evening", label: "Evening snack", target: 15 },
+      ],
 };
 const RECOVERY = {
     GAME: [
@@ -172,6 +185,11 @@ const RECOVERY = {
       {key:"gunLight",label:"Gun — light, whatever's tight",detail:"Cushion head, 5 min total"},
       {key:"roller",label:"Foam roller",detail:"Light, 5 min"},
         ],
+  LIFT_UPPER: [
+    {key:"gunChestShoulders",label:"Gun — chest & shoulders",detail:"Round head, 30 sec each side"},
+    {key:"gunUpperBack",label:"Gun — upper back",detail:"Flat head, 30 sec each side"},
+    {key:"roller",label:"Foam roller",detail:"5 min, light"},
+      ],
 };
 
 let state = { date: new Date() };
